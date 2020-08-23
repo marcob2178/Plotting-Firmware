@@ -14,7 +14,7 @@ private:
 
     //  x       y       z
     //  yaw     pitch   roll
-    void setOffsets(double _offset_y, double _offset_z,double _offset_x)
+    void setOffsets(double _offset_y, double _offset_z, double _offset_x)
     {
         offset_y = _offset_y;
         offset_z = _offset_z;
@@ -72,7 +72,37 @@ public:
     {
         euler = bno->getVector(Adafruit_BNO055::VECTOR_EULER);
         linaccel = bno->getVector(Adafruit_BNO055::VECTOR_LINEARACCEL);
-       // delayMicroseconds(500);
+        // delayMicroseconds(500);
+    }
+
+    bool isCal()
+    {
+        return bno->isFullyCalibrated();
+    }
+
+    void printCalibration()
+    {
+        uint8_t system, gyro, accel, mag;
+        system = gyro = accel = mag = 0;
+        bno->getCalibration(&system, &gyro, &accel, &mag);
+
+        /* The data should be ignored until the system calibration is > 0 */
+        // Serial.print("\t");
+        // if (!system)
+        // {
+        //     Serial.print("! ");
+        // }
+
+        /* Display the individual values */
+        Serial.print("Sys:");
+        Serial.print(system, DEC);
+        Serial.print(" G:");
+        Serial.print(gyro, DEC);
+        Serial.print(" A:");
+        Serial.print(accel, DEC);
+        Serial.print(" M:");
+        Serial.print(mag, DEC);
+        Serial.print("\t");
     }
 };
-#endif              
+#endif
